@@ -1,0 +1,42 @@
+so vipi kama kuna device zangu nataka kuziunganisha bila ya kuliupia, inakuaje apo?
+9:03 AM
+Kuna njia 3 rahisi na za kitaalamu kwenye MikroTik za kuunganisha vifaa vyako (simu yako, laptop, Smart TV, au CCTV kamera) ili vipate intaneti ya bure moja kwa moja bila kuonyeshwa ukurasa wa kulipia:
+
+Njia ya 1 (Inayopendekezwa Zaidi): "IP Binding - Bypassed"
+Hii ndio njia bora na rahisi zaidi. Unaiambia router kuwa: "Kifaa hiki kikiunganisha, kipe intaneti mara moja bila kuuliza kulipia wala kufungua Captive Portal."
+
+Jinsi ya kufanya kwa Winbox (Bofya mara 2 tu):
+Unganisha simu yako au laptop kwenye Wi-Fi ya SKYLINK WIFI KITONGA.
+Fungua Winbox kwenye kompyuta yako.
+Nenda: IP ➔ Hotspot ➔ fungua tab ya Hosts.
+Utaona orodha ya vifaa vilivyounganishwa. Tafuta simu yako au laptop yako (kwa kuangalia jina au MAC Address yake).
+Right-Click (bofya kulia) kwenye kifaa chako ➔ chagua Make Binding.
+Kwenye kisanduku kitakachofunguka:
+Badilisha Type iwe: bypassed
+Kwenye Comment andika: Simu Yangu ya Mkononi (au Laptop ya Ofisi).
+Bofya OK.
+Matokeo: Kuanzia hapo, simu au laptop hiyo ikijiunga kwenye Wi-Fi, itapata intaneti ya bure moja kwa moja bila kuulizwa chochote!
+
+Au kwa kutumia Terminal (Amri ya Moja kwa Moja):
+Kama unajua MAC Address ya kifaa chako (inaonekana kwenye Settings za simu -> About Phone -> Status/MAC):
+
+routeros
+/ip hotspot ip-binding add mac-address=AA:BB:CC:DD:EE:FF type=bypassed comment="Simu ya Boss"
+(Badilisha AA:BB:CC:DD:EE:FF na MAC address ya simu yako).
+
+Njia ya 2: Kutengeneza Akaunti ya VIP Isiyo na Mwisho (Permanent User)
+Kama hutaki kutumia MAC Address, unaweza kutengeneza akaunti ya jina na nenosiri (username & password) isiyo na kikomo cha muda:
+
+Kwenye Terminal ya Winbox, weka amri hii:
+
+routeros
+/ip hotspot user add name="boss" password="123" profile="default" comment="Akaunti Yangu ya Bure"
+Ukiunganisha kifaa chako, unaweza kuingia kwa jina: boss na password: 123.
+Kwa sababu haijawekewa limit-uptime, akaunti hii haimaliziki kamwe na ni ya bure masaa 24/7.
+Njia ya 3: Wi-Fi ya Siri/Binafsi (Virtual AP yenye Password)
+Ikiwa unataka Wi-Fi tofauti kabisa kwa ajili yako na familia/wafanyakazi wako:
+
+MikroTik ina uwezo wa kutoa majina mawili ya Wi-Fi kwa wakati mmoja:
+SKYLINK WIFI KITONGA (Kwa wateja - haina password, inafungua ukurasa wa kulipia).
+SKYLINK OFISI / VIP (Kwa ajili yako - ina password ya siri ya WPA2, haipiti kwenye Hotspot kabisa).
+👉 Ushauri: Tumia Njia ya 1 (IP Binding - Bypassed) kwa sababu ni rahisi sana na inafanya kazi mara moja papo hapo bila kuhitaji kubadilisha mipangilio ya Wi-Fi!

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="sw" class="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#f5f5f7" />
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<title>SKYLINK WIFI KITONGA — Usimamizi wa Dashibodi</title>
+
+<!-- Local CSS (Offline & Captive Portal Safe) -->
+<link rel="stylesheet" href="assets/style.css" />
+<!-- Tailwind CSS CDN Fallback -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", "Helvetica Neue", sans-serif;
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+    -webkit-font-smoothing: antialiased;
+  }
+  .apple-glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  }
+  .apple-glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  }
+  .settings-field-label { font-size: 11px; font-weight: 700; color: #86868b; margin-bottom: 5px; display: block; text-transform: uppercase; letter-spacing: 0.04em; }
+  .settings-input {
+    width: 100%;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 1rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 13px;
+    color: #1d1d1f;
+    outline: none;
+    transition: all .2s;
+  }
+  .settings-input:focus { border-color: #0071e3; box-shadow: 0 0 0 3px rgba(0,113,227,0.15); }
+  .settings-input.invalid { border-color: #ef4444; }
+
+  #modal-backdrop, #pwa-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+  #modal-backdrop.open, #pwa-modal-backdrop.open { display: flex; }
+
+  .rule { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #86868b; transition: color .15s; }
+  .rule.met { color: #10b981; font-weight: 600; }
+  .rule .dot { width: 14px; text-align: center; }
+
+  #toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 20000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .toast { animation: toast-in 0.25s ease-out; }
+  @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes toast-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(8px); } }
+</style>
+</head>
+<body class="antialiased min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+<!-- Ambient Mesh Blobs -->
+<div class="fixed top-[-15%] left-[-10%] w-[580px] h-[580px] bg-gradient-to-br from-blue-300/35 via-indigo-200/25 to-sky-200/30 rounded-full blur-[130px] pointer-events-none -z-10"></div>
+<div class="fixed top-[35%] right-[-15%] w-[620px] h-[620px] bg-gradient-to-br from-teal-200/30 via-emerald-100/25 to-sky-300/30 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+
+<div id="toast-container"></div>
+
+<!-- NAV -->
+<nav class="sticky top-0 z-40 apple-glass border-b border-black/[0.06]">
+  <div class="max-w-4xl mx-auto px-6 md:px-12 py-3.5 flex items-center justify-between">
+    <a class="flex items-center gap-3 group" href="menu.html">
+      <div class="w-10 h-10 rounded-2xl bg-white shadow-xs border border-black/5 flex items-center justify-center p-1.5">
+        <img src="assets/logo.png" alt="Logo" class="w-full h-full object-contain" />
+      </div>
+      <span class="font-extrabold text-base sm:text-lg tracking-tight text-[#1d1d1f]">SKYLINK WIFI KITONGA</span>
+    </a>
+    <div class="flex items-center gap-2">
+      <a class="px-4 py-2 rounded-full apple-glass hover:bg-white text-xs font-semibold text-[#1d1d1f] shadow-xs transition" href="menu.html">
+        ← Menyu Kuu
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<div class="relative z-10 flex-1 flex items-center justify-center px-4 py-16">
+  <div class="apple-glass-card rounded-[32px] w-full max-w-md p-8 sm:p-10 text-center shadow-lg">
+    <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[#0071e3] mx-auto mb-4 text-2xl shadow-xs">
+      <i class="fa-solid fa-sliders"></i>
+    </div>
+    <h1 class="text-2xl font-extrabold text-[#1d1d1f] tracking-tight">Dashibodi ya Takwimu</h1>
+    <p class="text-xs sm:text-sm text-[#86868b] mt-2 leading-relaxed">
+      Weka nenosiri lako la siri (login credentials) na upakue faili la <span class="text-[#1d1d1f] font-semibold">statistics.html</span> lililowekwa nenosiri hilo ili kulinda mapato na router yako.
+    </p>
+
+    <button type="button" onclick="openModal()" class="mt-6 w-full text-sm font-bold px-6 py-3.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white shadow-lg shadow-blue-500/25 transition flex items-center justify-center gap-2">
+      <i class="fa-solid fa-key"></i> Weka Nenosiri la Dashibodi
+    </button>
+
+    <a href="statistics.html" class="mt-3 w-full text-xs font-bold px-5 py-3 rounded-full apple-glass hover:bg-white text-[#1d1d1f] transition flex items-center justify-center gap-2 border border-black/10">
+      <i class="fa-solid fa-chart-line text-[#0071e3]"></i> Fungua Takwimu Sasa (Live Stats)
+    </a>
+  </div>
+</div>
+
+<!-- ============ CREDENTIALS MODAL ============ -->
+<div id="modal-backdrop" onclick="if(event.target===this) closeModal()">
+  <div class="apple-glass rounded-[28px] w-full max-w-sm p-6 shadow-2xl border border-white/90">
+
+    <!-- Step 1: credentials form -->
+    <div id="step-form">
+      <div class="flex items-start justify-between mb-2">
+        <div>
+          <h2 class="text-base font-extrabold text-[#1d1d1f] flex items-center gap-2"><i class="fa-solid fa-shield-halved text-[#0071e3]"></i> Weka Nenosiri Jipya</h2>
+          <p class="text-[11px] text-[#86868b] mt-0.5">Kwa ajili ya kufungua statistics.html</p>
+        </div>
+        <button type="button" onclick="closeModal()" class="text-[#86868b] hover:text-[#1d1d1f] transition text-lg leading-none px-1"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form onsubmit="return handleContinue(event)" class="mt-4 space-y-3">
+        <div>
+          <label class="settings-field-label">Username</label>
+          <input type="text" id="new-username" autocomplete="off" class="settings-input" placeholder="e.g. admin" required>
+        </div>
+        <div>
+          <label class="settings-field-label">Password Mpya</label>
+          <input type="password" id="new-password" autocomplete="new-password" class="settings-input" placeholder="Chagua password" oninput="updateRules()" required>
+        </div>
+        <div>
+          <label class="settings-field-label">Rudia Password</label>
+          <input type="password" id="confirm-password" autocomplete="new-password" class="settings-input" placeholder="Rudia password" oninput="updateRules()" required>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-2 gap-y-1.5 bg-black/[0.03] border border-black/[0.06] rounded-2xl px-3 py-2.5 mt-2">
+          <div class="rule" id="rule-length"><span class="dot"><i class="fa-solid fa-circle-xmark"></i></span> 8+ characters</div>
+          <div class="rule" id="rule-upper"><span class="dot"><i class="fa-solid fa-circle-xmark"></i></span> Herufi kubwa</div>
+          <div class="rule" id="rule-lower"><span class="dot"><i class="fa-solid fa-circle-xmark"></i></span> Herufi ndogo</div>
+          <div class="rule" id="rule-number"><span class="dot"><i class="fa-solid fa-circle-xmark"></i></span> Namba</div>
+          <div class="rule" id="rule-special"><span class="dot"><i class="fa-solid fa-circle-xmark"></i></span> Alama maalum</div>
+          <div class="rule" id="rule-match"><span class="dot"><i class="fa-solid fa-circle-xmark"></i></span> Zinafanana</div>
+        </div>
+
+        <p id="form-error" class="hidden text-[11px] text-red-500 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2"></p>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal()" class="text-xs font-semibold px-4 py-2.5 rounded-full apple-glass hover:bg-white text-[#1d1d1f]">Ghairi</button>
+          <button type="submit" class="text-xs font-bold px-5 py-2.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white shadow-md shadow-blue-500/20 transition"><i class="fa-solid fa-download mr-1"></i> Pakua statistics.html</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 2: manual file fallback -->
+    <div id="step-manual" class="hidden">
+      <div class="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 mb-3"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <h2 class="text-base font-bold text-[#1d1d1f]">Chagua faili la statistics.html</h2>
+      <p class="text-xs text-[#86868b] mt-1.5 leading-relaxed">
+        Chagua faili la <strong>statistics.html</strong> kutoka kwenye kompyuta yako ili liwekewe nenosiri lako jipya kiotomatiki.
+      </p>
+      <input type="file" id="manual-file-input" accept=".html" class="settings-input mt-4" onchange="handleManualFile(event)">
+      <p id="manual-error" class="hidden text-[11px] text-red-500 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2 mt-3"></p>
+      <div class="flex items-center justify-end gap-2 mt-4">
+        <button type="button" onclick="closeModal()" class="text-xs font-semibold px-4 py-2 rounded-full apple-glass text-[#1d1d1f]">Ghairi</button>
+      </div>
+    </div>
+
+    <!-- Step 3: success -->
+    <div id="step-done" class="hidden text-center py-4">
+      <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 mb-3 mx-auto text-xl"><i class="fa-solid fa-check"></i></div>
+      <h2 class="text-lg font-extrabold text-[#1d1d1f]">Limepakuliwa Kikamilifu!</h2>
+      <p class="text-xs text-[#86868b] mt-1.5 leading-relaxed">Faili jipya la <strong>statistics.html</strong> lenye nenosiri lako limeshapakuliwa. Weka faili hili ndani ya folda ya mradi wako.</p>
+      <button type="button" onclick="closeModal()" class="mt-5 text-xs font-bold px-6 py-2.5 rounded-full bg-[#0071e3] text-white shadow-md shadow-blue-500/20 transition">Nimemaliza</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="relative z-10 max-w-4xl mx-auto px-6 py-8 text-center text-[#86868b] text-xs border-t border-black/[0.05] w-full">
+  <p>© 2026 SKYLINK WIFI KITONGA — Usimamizi wa Mtandao.</p>
+</footer>
+
+<script>
+function passwordChecks(password, confirm) {
+  return {
+    length: password.length >= 8,
+    upper: /[A-Z]/.test(password),
+    lower: /[a-z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[^A-Za-z0-9]/.test(password),
+    match: password.length > 0 && password === confirm
+  };
+}
+
+function setRule(id, met) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("met", met);
+  el.querySelector(".dot").innerHTML = met
+    ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>'
+    : '<i class="fa-solid fa-circle-xmark text-[#86868b]"></i>';
+}
+
+function updateRules() {
+  const password = document.getElementById("new-password").value;
+  const confirm = document.getElementById("confirm-password").value;
+  const checks = passwordChecks(password, confirm);
+  setRule("rule-length", checks.length);
+  setRule("rule-upper", checks.upper);
+  setRule("rule-lower", checks.lower);
+  setRule("rule-number", checks.number);
+  setRule("rule-special", checks.special);
+  setRule("rule-match", checks.match);
+  return checks;
+}
+
+function openModal() {
+  document.getElementById("modal-backdrop").classList.add("open");
+  document.getElementById("step-form").classList.remove("hidden");
+  document.getElementById("step-manual").classList.add("hidden");
+  document.getElementById("step-done").classList.add("hidden");
+  document.getElementById("new-username").value = "";
+  document.getElementById("new-password").value = "";
+  document.getElementById("confirm-password").value = "";
+  hideFormError();
+  updateRules();
+  setTimeout(() => document.getElementById("new-username")?.focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById("modal-backdrop").classList.remove("open");
+}
+
+function hideFormError() {
+  document.getElementById("form-error").classList.add("hidden");
+}
+function showFormError(msg) {
+  const el = document.getElementById("form-error");
+  el.textContent = msg;
+  el.classList.remove("hidden");
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { closeModal(); }
+});
+
+let pendingCredentials = null;
+
+function handleContinue(evt) {
+  evt.preventDefault();
+  hideFormError();
+
+  const username = document.getElementById("new-username").value.trim();
+  const password = document.getElementById("new-password").value;
+  const confirm = document.getElementById("confirm-password").value;
+  const checks = updateRules();
+
+  if (!username) {
+    showFormError("Weka jina la mtumiaji (Username).");
+    return false;
+  }
+  if (/\s/.test(username)) {
+    showFormError("Username haiwezi kuwa na nafasi (spaces).");
+    return false;
+  }
+  const allMet = Object.values(checks).every(Boolean);
+  if (!allMet) {
+    showFormError("Nenosiri halijakidhi vigezo vyote vilivyoorodheshwa.");
+    return false;
+  }
+
+  pendingCredentials = { username, password };
+  fetchAndBuild();
+  return false;
+}
+
+async function fetchAndBuild() {
+  try {
+    const res = await fetch("statistics.html", { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    finishDownload(text);
+  } catch (err) {
+    document.getElementById("step-form").classList.add("hidden");
+    document.getElementById("step-manual").classList.remove("hidden");
+  }
+}
+
+function handleManualFile(evt) {
+  const file = evt.target.files && evt.target.files[0];
+  const errEl = document.getElementById("manual-error");
+  errEl.classList.add("hidden");
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => finishDownload(reader.result);
+  reader.onerror = () => {
+    errEl.textContent = "Haikuweza kusoma faili hilo — jaribu tena.";
+    errEl.classList.remove("hidden");
+  };
+  reader.readAsText(file);
+}
+
+function jsStringEscape(str) {
+  return String(str)
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "");
+}
+
+function finishDownload(originalHtml) {
+  const errEl = document.getElementById("manual-error");
+  const { username, password } = pendingCredentials;
+
+  const credLinePattern = /const APP_CREDENTIALS = \{ username: "(?:[^"\\]|\\.)*", password: "(?:[^"\\]|\\.)*" \};/;
+  if (!credLinePattern.test(originalHtml)) {
+    const msg = "Haikupata sehemu ya nenosiri ndani ya statistics.html.";
+    if (errEl) { errEl.textContent = msg; errEl.classList.remove("hidden"); }
+    else showFormError(msg);
+    return;
+  }
+
+  const newLine = `const APP_CREDENTIALS = { username: "${jsStringEscape(username)}", password: "${jsStringEscape(password)}" };`;
+  const updatedHtml = originalHtml.replace(credLinePattern, newLine);
+
+  const blob = new Blob([updatedHtml], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "statistics.html";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  document.getElementById("step-form").classList.add("hidden");
+  document.getElementById("step-manual").classList.add("hidden");
+  document.getElementById("step-done").classList.remove("hidden");
+  showToast("statistics.html imepakuliwa na nenosiri lako jipya.", "success");
+}
+
+function showToast(message, kind = "info") {
+  const container = document.getElementById("toast-container");
+  const colors = {
+    success: "bg-white/95 border-emerald-500/30 text-emerald-700",
+    error: "bg-white/95 border-red-500/30 text-red-600",
+    info: "bg-white/95 border-black/10 text-[#1d1d1f]"
+  };
+  const icons = { success: "fa-circle-check text-emerald-500", error: "fa-circle-exclamation text-red-500", info: "fa-circle-info text-[#0071e3]" };
+  const toast = document.createElement("div");
+  toast.className = `toast apple-glass border ${colors[kind] || colors.info} rounded-2xl px-4 py-3 text-xs font-semibold flex items-center gap-2 shadow-lg max-w-xs`;
+  toast.innerHTML = `<i class="fa-solid ${icons[kind] || icons.info}"></i> <span>${message}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.animation = "toast-out 0.25s ease-in forwards";
+    setTimeout(() => toast.remove(), 250);
+  }, 3500);
+}
+</script>
+</body>
+</html>

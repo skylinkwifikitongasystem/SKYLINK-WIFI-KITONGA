@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="sw" class="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SKYLINK WIFI KITONGA — Usanidi wa Router (Onboarding)</title>
+<meta name="description" content="Mwongozo wa kusanidi router ya MikroTik RB951 kwa ajili ya SKYLINK WIFI KITONGA na malipo ya Abliner." />
+
+<!-- Favicon Assets -->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="assets/style.css" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", "Helvetica Neue", sans-serif;
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+  .apple-glass {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  }
+  .apple-glass-card {
+    background: rgba(255, 255, 255, 0.68);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  }
+  pre::-webkit-scrollbar { height: 6px; }
+  pre::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 999px; }
+</style>
+</head>
+
+<body class="antialiased min-h-screen relative overflow-x-hidden flex flex-col justify-between">
+
+  <!-- Apple Iridescent Ambient Mesh Blobs -->
+  <div class="fixed top-[-15%] left-[-10%] w-[580px] h-[580px] bg-gradient-to-br from-blue-300/35 via-indigo-200/25 to-sky-200/30 rounded-full blur-[130px] pointer-events-none -z-10"></div>
+  <div class="fixed top-[35%] right-[-15%] w-[620px] h-[620px] bg-gradient-to-br from-teal-200/30 via-emerald-100/25 to-sky-300/30 rounded-full blur-[140px] pointer-events-none -z-10"></div>
+  <div class="fixed bottom-[-15%] left-[25%] w-[520px] h-[520px] bg-gradient-to-tr from-purple-200/25 via-pink-100/20 to-blue-200/25 rounded-full blur-[130px] pointer-events-none -z-10"></div>
+
+  <!-- NAV -->
+  <nav class="sticky top-0 z-40 apple-glass border-b border-black/[0.06]">
+    <div class="max-w-4xl mx-auto px-6 md:px-12 py-3.5 flex items-center justify-between">
+      <a class="flex items-center gap-3 group" href="menu.html">
+        <div class="w-10 h-10 rounded-2xl bg-white shadow-xs border border-black/5 flex items-center justify-center p-1.5">
+          <img src="assets/logo.png" alt="Logo" class="w-full h-full object-contain" />
+        </div>
+        <span class="font-extrabold text-base sm:text-lg tracking-tight text-[#1d1d1f]">SKYLINK WIFI KITONGA</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a class="px-4 py-2 rounded-full apple-glass hover:bg-white text-xs font-semibold text-[#1d1d1f] shadow-xs transition" href="menu.html">
+          ← Menyu Kuu
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-6 md:px-12 py-10 w-full">
+
+    <!-- Header -->
+    <header class="mb-10 text-center">
+      <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 text-[#0071e3] text-xs font-semibold uppercase tracking-wider rounded-full px-4 py-1.5 mb-4">
+        Hatua ya 1: Usanidi wa MikroTik
+      </div>
+      <h1 class="font-extrabold text-3xl md:text-5xl text-[#1d1d1f] tracking-tight">Kusanidi Router (Onboarding)</h1>
+      <p class="text-[#86868b] text-sm md:text-base mt-3 max-w-xl mx-auto">
+        Nakili (copy) na uweke scripts hizi kwenye <strong>Winbox Terminal</strong> ili kuandaa MikroTik RB951 kufanya kazi na mfumo wa SKYLINK.
+      </p>
+    </header>
+
+    <!-- SCRIPT 1: DHCP CLIENT + INTERNET TEST -->
+    <section class="apple-glass-card rounded-[28px] p-6 md:p-8 mb-6">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[#0071e3] text-sm font-bold">1</div>
+        <h2 class="font-bold text-lg text-[#1d1d1f] tracking-tight">Kuingiza Intaneti Kwenye Ether 1 (WAN)</h2>
+      </div>
+      <p class="text-[#86868b] text-xs sm:text-sm mt-1 mb-5 leading-relaxed">
+        Script hii inafanya Port 1 (ether1) kupokea intaneti kutoka kwenye modemu au router ya ISP wako na kupima kama intaneti ipo.
+      </p>
+
+      <button
+        id="generate-one-btn"
+        onclick="revealScript('script-one-block', 'generate-one-btn')"
+        class="inline-flex items-center justify-center gap-2 bg-[#0071e3] hover:bg-[#0077ed] text-white font-bold py-2.5 px-6 rounded-full shadow-md shadow-blue-500/20 text-xs cursor-pointer transition mb-5"
+      >
+        Onyesha Script 1
+      </button>
+      <p id="script-one-placeholder" class="text-xs text-[#86868b] -mt-3 mb-4">Bonyeza kitufe hapo juu kuona script ya RouterOS.</p>
+
+      <div id="script-one-block" class="relative hidden">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#86868b]">RouterOS Script (Ether 1)</span>
+          <button
+            onclick="copyCode('script-one-code', 'copy-one-label')"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1d1d1f] bg-white/80 border border-black/10 rounded-full px-3 py-1 shadow-xs hover:bg-white transition cursor-pointer"
+          >
+            <span id="copy-one-label">Copy</span>
+          </button>
+        </div>
+        <pre class="bg-black/90 rounded-2xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-emerald-400 shadow-inner"><code id="script-one-code"># 1. Weka DHCP client kwenye ether1
+/ip dhcp-client add interface=ether1 add-default-route=yes use-peer-dns=yes disabled=no
+# 2. Subiri sekunde 5 kupata IP
+:delay 5s
+# 3. Pima mtandao (Ping)
+:if ([/ping address=8.8.8.8 count=3] > 0) do={
+    :put "✓ INTANETI IMEUNGANISHWA VIZURI!"
+} else={
+    :put "✗ HAKUNA INTANETI. Hakikisha waya wa intaneti umechomekwa ether1."
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- SCRIPT 2: BRIDGE AND PORT SETUP -->
+    <section class="apple-glass-card rounded-[28px] p-6 md:p-8 mb-6">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[#0071e3] text-sm font-bold">2</div>
+        <h2 class="font-bold text-lg text-[#1d1d1f] tracking-tight">Kutengeneza LAN Bridge (RB951)</h2>
+      </div>
+      <p class="text-[#86868b] text-xs sm:text-sm mt-1 mb-5 leading-relaxed">
+        Inatengeneza daraja (Bridge) linalounganisha port 2 hadi 5 na Wi-Fi (wlan1) ili wateja wote wapate mtandao wa Hotspot pamoja.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-3 mb-5">
+        <div class="flex-1">
+          <label for="port-count" class="block text-xs font-bold uppercase tracking-wider text-[#86868b] mb-1.5">Idadi ya Port za Router (RB951 = 5)</label>
+          <input
+            type="number"
+            id="port-count"
+            min="2"
+            max="24"
+            value="5"
+            class="w-full bg-white/90 border border-black/10 rounded-2xl px-4 py-2.5 text-sm text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]"
+          />
+        </div>
+        <button
+          onclick="generateBridgeScript()"
+          class="inline-flex items-center justify-center gap-2 bg-[#0071e3] hover:bg-[#0077ed] text-white font-bold py-2.5 px-6 rounded-full shadow-md shadow-blue-500/20 text-xs whitespace-nowrap cursor-pointer transition"
+        >
+          Tengeneza Script 2
+        </button>
+      </div>
+      <p id="port-error" class="hidden text-xs text-red-500 -mt-3 mb-3 font-medium">Weka idadi ya port kati ya 2 na 24.</p>
+      <p id="script-bridge-placeholder" class="text-xs text-[#86868b] -mt-3 mb-4">Bonyeza kitufe hapo juu kutengeneza script ya Bridge.</p>
+
+      <div id="script-bridge-block" class="relative hidden">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#86868b]">RouterOS Script (Bridge)</span>
+          <button
+            onclick="copyCode('script-bridge-code', 'copy-bridge-label')"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1d1d1f] bg-white/80 border border-black/10 rounded-full px-3 py-1 shadow-xs hover:bg-white transition cursor-pointer"
+          >
+            <span id="copy-bridge-label">Copy</span>
+          </button>
+        </div>
+        <pre class="bg-black/90 rounded-2xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-emerald-400 shadow-inner"><code id="script-bridge-code"></code></pre>
+      </div>
+    </section>
+
+    <!-- SCRIPT 3: COMPLETE HOTSPOT & ABLINER PROVISIONING -->
+    <section class="apple-glass-card rounded-[28px] p-6 md:p-8 mb-6 border-blue-500/30">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-9 h-9 rounded-xl bg-[#0071e3] text-white flex items-center justify-center text-sm font-bold shadow-sm">3</div>
+        <h2 class="font-bold text-lg text-[#1d1d1f] tracking-tight">Script Kamili ya Hotspot &amp; Abliner (provision_rb951.rsc)</h2>
+      </div>
+      <p class="text-[#86868b] text-xs sm:text-sm mt-1 mb-5 leading-relaxed">
+        Hii ndio script kuu inayoweka IP ya <code>30.0.0.1</code>, Wi-Fi SSID ya <code>SKYLINK WIFI KITONGA</code>, REST API ya kutengeneza watumiaji, na Walled Garden ya Port 443 HTTPS kwa ajili ya malipo ya Abliner.
+      </p>
+
+      <button
+        id="generate-three-btn"
+        onclick="revealScript('script-three-block', 'generate-three-btn')"
+        class="inline-flex items-center justify-center gap-2 bg-[#0071e3] hover:bg-[#0077ed] text-white font-bold py-2.5 px-6 rounded-full shadow-md shadow-blue-500/20 text-xs cursor-pointer transition mb-5"
+      >
+        Onyesha Script Kamili
+      </button>
+      <p id="script-three-placeholder" class="text-xs text-[#86868b] -mt-3 mb-4">Bonyeza hapa kuona script kamili ya kusanidi router yako.</p>
+
+      <div id="script-three-block" class="relative hidden">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#86868b]">RouterOS Script (Full Provisioning)</span>
+          <button
+            onclick="copyCode('script-provision-code', 'copy-provision-label')"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1d1d1f] bg-white/80 border border-black/10 rounded-full px-3 py-1 shadow-xs hover:bg-white transition cursor-pointer"
+          >
+            <span id="copy-provision-label">Copy</span>
+          </button>
+        </div>
+        <pre class="bg-black/90 rounded-2xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-sky-300 shadow-inner max-h-[500px]"><code id="script-provision-code"># ===================================================================
+# SKYLINK WIFI KITONGA (ABLINER) — COMPLETE SETUP SCRIPT FOR RB951
+# Run this in MikroTik Winbox -> Terminal (Paste and press Enter)
+# ===================================================================
+
+/system identity set name="SKYLINK-WIFI-KITONGA"
+
+# 1. WAN Connection on Ether 1
+/interface ethernet set [find default-name=ether1] name="ether1-WAN"
+:do {
+    /ip dhcp-client add interface="ether1-WAN" add-default-route=yes use-peer-dns=yes disabled=no
+} on-error={}
+
+# 2. Create LAN Bridge for Ports 2-5 and Wi-Fi
+:do {
+    /interface bridge add name="MIKROBILL Main bridge"
+} on-error={}
+
+:do { /interface bridge port add bridge="MIKROBILL Main bridge" interface=ether2 } on-error={}
+:do { /interface bridge port add bridge="MIKROBILL Main bridge" interface=ether3 } on-error={}
+:do { /interface bridge port add bridge="MIKROBILL Main bridge" interface=ether4 } on-error={}
+:do { /interface bridge port add bridge="MIKROBILL Main bridge" interface=ether5 } on-error={}
+:do { /interface bridge port add bridge="MIKROBILL Main bridge" interface=wlan1 } on-error={}
+:do { /interface wireless set [find default-name=wlan1] ssid="SKYLINK WIFI KITONGA" mode=ap-bridge default-forwarding=no disabled=no } on-error={}
+
+# 3. IP Addressing (Hotspot Gateway 30.0.0.1 and Secondary IP 30.0.0.2)
+:do { /ip address remove [find interface="MIKROBILL Main bridge"] } on-error={}
+/ip address add address=30.0.0.1/24 interface="MIKROBILL Main bridge" network=30.0.0.0 comment="hotspot gateway"
+/ip address add address=30.0.0.2/24 interface="MIKROBILL Main bridge" comment="Local API IP"
+
+# 4. IP Pool & DHCP Server (Supports 30-200 concurrent users)
+:do { /ip dhcp-server remove [find name="MIKROBILL Dhcp Server"] } on-error={}
+:do { /ip pool remove [find name="MIKROBILL Hotspot Pool"] } on-error={}
+/ip pool add name="MIKROBILL Hotspot Pool" ranges=30.0.0.10-30.0.0.200
+/ip dhcp-server add name="MIKROBILL Dhcp Server" interface="MIKROBILL Main bridge" address-pool="MIKROBILL Hotspot Pool" lease-time=1h disabled=no
+/ip dhcp-server network add address=30.0.0.0/24 gateway=30.0.0.1 dns-server=30.0.0.1,8.8.8.8 comment="hotspot network"
+
+# 5. Hotspot Profile & Server
+:do { /ip hotspot remove [find name="MIKROBILL Hotspot"] } on-error={}
+:do { /ip hotspot profile remove [find name="MIKROBILL Hotspot Profile"] } on-error={}
+/ip hotspot profile add name="MIKROBILL Hotspot Profile" hotspot-address=30.0.0.1 dns-name=mikrofig.com html-directory=hotspot login-by=cookie,http-chap,http-pap,mac-cookie
+/ip hotspot add name="MIKROBILL Hotspot" interface="MIKROBILL Main bridge" address-pool="MIKROBILL Hotspot Pool" profile="MIKROBILL Hotspot Profile" addresses-per-mac=1 disabled=no
+
+# 5b. Auto-Expiration on First Login (Enforces Wall-Clock Validity per Package)
+/ip hotspot user profile set [find default=yes] shared-users=1 on-login="{\
+    :local u \$user;\
+    :if ([:len [/system scheduler find name=\$u]] = 0) do={\
+        :local exp [/ip hotspot user get [find name=\$u] limit-uptime];\
+        :if ([:len \$exp] > 0) do={\
+            /system scheduler add name=\$u start-date=[/system clock get date] start-time=[/system clock get time] interval=\$exp on-event=\"/ip hotspot active remove [find user=\\\"\$u\\\"]; /ip hotspot cookie remove [find user=\\\"\$u\\\"]; /ip hotspot user remove [find name=\\\"\$u\\\"]; /system scheduler remove [find name=\\\"\$u\\\"];\" policy=read,write,policy,test comment=\"Auto-expire for \$u\";\
+            :local c [/ip hotspot user get [find name=\$u] comment];\
+            /ip hotspot user set [find name=\$u] comment=\"\$c [Started: \$[/system clock get date] \$[/system clock get time]]\";\
+        }\
+    }\
+}"
+
+# 6. Firewall & NAT Rules
+/ip firewall nat add chain=srcnat src-address=30.0.0.0/24 action=masquerade comment="Masquerade Hotspot LAN"
+/ip firewall nat add chain=srcnat out-interface="ether1-WAN" action=masquerade comment="Masquerade WAN"
+
+# Allow Web, Portal, REST API & DNS from LAN
+/ip firewall filter add chain=input in-interface="MIKROBILL Main bridge" protocol=tcp dst-port=80,443 action=accept comment="Allow Web, Portal and REST API access from hotspot LAN"
+/ip firewall filter add chain=input in-interface="MIKROBILL Main bridge" protocol=udp dst-port=53 action=accept comment="Allow DNS queries from hotspot LAN"
+/ip firewall filter add chain=input in-interface="MIKROBILL Main bridge" protocol=tcp dst-port=53 action=accept comment="Allow DNS TCP queries from hotspot LAN"
+/ip firewall filter add chain=input in-interface="MIKROBILL Main bridge" protocol=icmp action=drop comment="ICMP Drop"
+/ip firewall filter add chain=forward in-interface="MIKROBILL Main bridge" src-address=30.0.0.0/24 dst-address=30.0.0.0/24 action=drop comment="Hotspot Client Isolation"
+
+# 6b. Anti-Hotspot Sharing (Tethering Protection: Prevents clients from sharing WiFi with friends)
+/ip firewall mangle add chain=postrouting out-interface="MIKROBILL Main bridge" action=change-ttl new-ttl=set:1 passthrough=yes comment="Anti-Hotspot Sharing: Drop tethered traffic"
+
+# 7. DNS & REST API Service
+/ip dns set allow-remote-requests=yes servers=8.8.8.8,1.1.1.1
+:do { /ip dns static remove [find name="mikrofig.com"] } on-error={}
+:do { /ip dns static remove [find name="mikrofig.login"] } on-error={}
+/ip dns static add name=mikrofig.com address=30.0.0.1
+/ip dns static add name=mikrofig.login address=30.0.0.1
+
+/ip service enable www
+/ip service set www address=0.0.0.0/0 port=80
+
+# 8. Create Billing REST API User
+:do { /user remove [find name="mikrobill_billing"] } on-error={}
+:do { /user remove [find name="skylink_wifikitonga"] } on-error={}
+:do { /user group add name=mikrobill-api policy=read,write,policy,test,api,rest-api } on-error={}
+/user add name=skylink_wifikitonga password="1961" group=mikrobill-api
+
+# 9. Walled Garden (Allows Abliner Mobile Money & CDNs before Login)
+/ip hotspot walled-garden
+add dst-host=*.workers.dev comment="Cloudflare Workers Relay"
+add dst-host=skylink-pay.skylinkwifisystem.workers.dev comment="SKYLINK Pay Relay"
+add dst-host=abliner.net comment="Abliner API"
+add dst-host=*.abliner.net
+add dst-host=cdn.tailwindcss.com comment="Tailwind CSS CDN"
+add dst-host=*.tailwindcss.com
+add dst-host=cdnjs.cloudflare.com comment="Icons and CDN"
+add dst-host=fonts.googleapis.com
+add dst-host=fonts.gstatic.com
+
+/ip hotspot walled-garden ip
+add dst-address=30.0.0.1 action=accept comment="Router Hotspot Portal"
+add dst-address=30.0.0.2 action=accept comment="Local API access before login"
+add dst-host=*.workers.dev action=accept comment="Cloudflare Workers Relay HTTPS"
+add dst-host=skylink-pay.skylinkwifisystem.workers.dev action=accept comment="SKYLINK Pay Relay HTTPS"
+add dst-host=abliner.net action=accept comment="Abliner HTTPS API"
+add dst-host=*.abliner.net action=accept
+add dst-host=cdn.tailwindcss.com action=accept comment="Tailwind CSS CDN HTTPS"
+add dst-host=*.tailwindcss.com action=accept
+add dst-host=cdnjs.cloudflare.com action=accept comment="Icons and CDN HTTPS"
+add dst-host=fonts.googleapis.com action=accept
+add dst-host=fonts.gstatic.com action=accept
+
+# 10. Clock & NTP Time Sync (Required for accurate expiration schedulers)
+/system clock set time-zone-name="Africa/Dar_es_Salaam"
+:do {
+    /system ntp client set enabled=yes
+    /system ntp client servers add address=pool.ntp.org
+} on-error={}
+
+# 11. Automatic Payment Sync (Cloudflare Worker -> MikroTik Hotspot Users)
+:do { /system script remove [find name="sync_skylink"] } on-error={}
+:do { /system scheduler remove [find name="sync_skylink_sched"] } on-error={}
+/system script add name="sync_skylink" source="{\
+  :do {\
+    :local res [/tool fetch url=\"https://skylink-pay.skylinkwifisystem.workers.dev/mikrotik/sync\" check-certificate=no output=user as-value];\
+    :if ((\$res->\"status\") = \"finished\") do={\
+      :local cmd (\$res->\"data\");\
+      :if ([:len \$cmd] > 10) do={\
+        :execute script=\$cmd;\
+      }\
+    }\
+  } on-error={}\
+}"
+/system scheduler add name="sync_skylink_sched" interval=20s on-event="sync_skylink" comment="Auto-sync paid hotspot users from Cloudflare Relay every 20s"
+
+# 12. Real-Time Telemetry Push (MikroTik RouterOS v7 -> Cloudflare Relay)
+:do { /system script remove [find name="push_telemetry"] } on-error={}
+:do { /system scheduler remove [find name="push_telemetry_sched"] } on-error={}
+/system script add name="push_telemetry" source="{\
+  :do {\
+    :local cpu [/system resource get cpu-load];\
+    :local freeMem [/system resource get free-memory];\
+    :local totMem [/system resource get total-memory];\
+    :local up [/system resource get uptime];\
+    :local ver [/system resource get version];\
+    :local bName [/system resource get board-name];\
+    :local rName [/system identity get name];\
+    :local actCount [:len [/ip hotspot active find]];\
+    :local usrCount [:len [/ip hotspot user find]];\
+    :local actList \"\";\
+    :local first true;\
+    :foreach i in=[/ip hotspot active find] do={\
+      :local u [/ip hotspot active get \$i user];\
+      :local a [/ip hotspot active get \$i address];\
+      :local m [/ip hotspot active get \$i mac-address];\
+      :local ut [/ip hotspot active get \$i uptime];\
+      :local bi [/ip hotspot active get \$i bytes-in];\
+      :local bo [/ip hotspot active get \$i bytes-out];\
+      :if (!\$first) do={ :set actList (\$actList . \",\"); };\
+      :set first false;\
+      :set actList (\$actList . \"{\\\"user\\\":\\\"\" . \$u . \"\\\",\\\"address\\\":\\\"\" . \$a . \"\\\",\\\"mac\\\":\\\"\" . \$m . \"\\\",\\\"uptime\\\":\\\"\" . \$ut . \"\\\",\\\"bytes_in\\\":\" . \$bi . \",\\\"bytes_out\\\":\" . \$bo . \"}\");\
+    };\
+    :local usrList \"\";\
+    :local uFirst true;\
+    :foreach i in=[/ip hotspot user find] do={\
+      :local un [/ip hotspot user get \$i name];\
+      :local lu [/ip hotspot user get \$i limit-uptime];\
+      :local uut [/ip hotspot user get \$i uptime];\
+      :local c [/ip hotspot user get \$i comment];\
+      :local p [/ip hotspot user get \$i profile];\
+      :if (!\$uFirst) do={ :set usrList (\$usrList . \",\"); };\
+      :set uFirst false;\
+      :set usrList (\$usrList . \"{\\\"name\\\":\\\"\" . \$un . \"\\\",\\\"limit_uptime\\\":\\\"\" . \$lu . \"\\\",\\\"uptime\\\":\\\"\" . \$uut . \"\\\",\\\"profile\\\":\\\"\" . \$p . \"\\\",\\\"comment\\\":\\\"\" . \$c . \"\\\"}\");\
+    };\
+    :local rxBytes 0;\
+    :local txBytes 0;\
+    :do { :set rxBytes [/interface get [find name=\"MIKROBILL Main bridge\"] rx-byte] } on-error={};\
+    :do { :set txBytes [/interface get [find name=\"MIKROBILL Main bridge\"] tx-byte] } on-error={};\
+    :local payload (\"{\\\"identity\\\":\\\"\" . \$rName . \"\\\",\\\"cpu\\\":\" . \$cpu . \",\\\"free_memory\\\":\" . \$freeMem . \",\\\"total_memory\\\":\" . \$totMem . \",\\\"uptime\\\":\\\"\" . \$up . \"\\\",\\\"version\\\":\\\"\" . \$ver . \"\\\",\\\"board\\\":\\\"\" . \$bName . \"\\\",\\\"active_users\\\":\" . \$actCount . \",\\\"total_users\\\":\" . \$usrCount . \",\\\"rx_bytes\\\":\" . \$rxBytes . \",\\\"tx_bytes\\\":\" . \$txBytes . \",\\\"active_list\\\":[\" . \$actList . \"],\\\"users_list\\\":[\" . \$usrList . \"]}\");\
+    /tool fetch url=\"https://skylink-pay.skylinkwifisystem.workers.dev/telemetry\" http-method=post http-data=\$payload http-header-field=\"Content-Type: application/json\" check-certificate=no keep-result=no;\
+  } on-error={}\
+}"
+/system scheduler add name="push_telemetry_sched" interval=15s on-event="push_telemetry" comment="Push live router telemetry to Cloudflare Relay every 15s"
+
+:put "=========================================================="
+:put "✓ SKYLINK WIFI KITONGA RB951 SETUP COMPLETED SUCCESSFULLY!"
+:put "✓ Hotspot Gateway: 30.0.0.1 (mikrofig.com)"
+:put "✓ REST API User: skylink_wifikitonga (Active)"
+:put "✓ Real-Time Telemetry Push: Active (Syncs every 15s to Cloudflare)"
+:put "✓ Auto-Expiration Scheduler Enabled (Wall-clock validity)"
+:put "✓ Auto-Payment Sync Active (Fetches paid users every 20s)"
+:put "✓ Upload the contents of 'router-files/hotspot/' into router Files"
+:put "=========================================================="</code></pre>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a class="inline-flex items-center gap-2 bg-[#0071e3] hover:bg-[#0077ed] text-white font-bold py-2.5 px-6 rounded-full text-xs shadow-md shadow-blue-500/20 transition" href="captiveportal.html">
+          Endelea na Vifurushi vya Abliner →
+        </a>
+      </div>
+    </section>
+
+    <!-- SCRIPT 4: ANTI-HOTSPOT SHARING & CLIENT ISOLATION -->
+    <!-- SCRIPT 4: SAFE CLIENT ISOLATION & RECONNECT PROTECTION -->
+    <section class="apple-glass-card rounded-[28px] p-6 md:p-8 mb-6 border-emerald-500/30">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 text-sm font-bold">4</div>
+          <h2 class="font-bold text-lg text-[#1d1d1f] tracking-tight">Ulinzi wa Mtandao na Muunganisho wa Uhakika (Fix & Isolation)</h2>
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Usalama &amp; Utulivu
+        </span>
+      </div>
+      <p class="text-[#86868b] text-xs sm:text-sm mt-1 mb-5 leading-relaxed">
+        Kama unataka kuhakikisha wateja hawashare Wi-Fi na intaneti inafanya kazi kwenye kompyuta za Windows na simu bila kosa la "Action needed, no internet", nakili amri hizi kisha ubandike kwenye <strong>Winbox Terminal</strong>:
+      </p>
+
+      <div class="relative">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#86868b]">Amri za RouterOS (Kurekebisha Intaneti &amp; Ulinzi)</span>
+          <button
+            onclick="copyCode('script-anti-sharing-code', 'copy-anti-sharing-label')"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1d1d1f] bg-white/80 border border-black/10 rounded-full px-3 py-1 shadow-xs hover:bg-white transition cursor-pointer"
+          >
+            <span id="copy-anti-sharing-label">Copy</span>
+          </button>
+        </div>
+        <pre class="bg-black/90 rounded-2xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-emerald-400 shadow-inner"><code id="script-anti-sharing-code"># 1. Ondoa sheria zote za Mangle (TTL=1) zinazoharibu intaneti kwenye Windows
+/ip firewall mangle remove [find]
+
+# 2. Ruhusu ICMP Ping ili Windows na Simu zigundue intaneti mara moja
+/ip firewall filter remove [find comment="ICMP Drop"]
+:do { /ip firewall filter add chain=input in-interface="MIKROBILL Main bridge" protocol=icmp action=accept comment="Allow ICMP ping" place-before=[find chain=input protocol=tcp dst-port=80,443] } on-error={ /ip firewall filter add chain=input protocol=icmp action=accept comment="Allow ICMP ping" }
+
+# 3. Zima FastTrack (FastTrack inaharibu Hotspot accounting)
+:do { /ip firewall filter disable [find action=fasttrack-connection] } on-error={}
+
+# 4. Zuia wateja kuwasiliana wao kwa wao kwenye Wi-Fi (Client Isolation)
+/interface wireless set [find default-name=wlan1] default-forwarding=no
+
+# 5. Wezesha shared-users=2 na Cookies ili mteja asiwe locked out akitoka na kuingia tena
+/ip hotspot user profile set [find default=yes] shared-users=2
+/ip hotspot profile set [find name="MIKROBILL Hotspot Profile"] login-by=http-chap,http-pap,cookie
+/ip hotspot set [find default=yes] addresses-per-mac=1
+
+:put "✓ USANIDI SALAMA WA MTANDAO UMEKAMILIKA!"</code></pre>
+      </div>
+
+      <div class="mt-4 p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-xs text-[#86868b] space-y-1.5">
+        <p class="font-semibold text-[#1d1d1f]">Faida za Usanidi Huu:</p>
+        <p>• <strong>Intaneti ya Uhakika:</strong> Huondoa tatizo la "Action needed, no internet" kwenye Windows 10/11 na simu za kisasa.</p>
+        <p>• <strong>Ku-reconnect Bila Kero:</strong> Mteja alielipia anaweza kutoka na kuingia tena kwa namba yake bila kukataliwa au kulazimika kuzima Wi-Fi.</p>
+        <p>• <strong>Client Isolation:</strong> Wateja hawawezi ku-hack au kuingiliana vifaa vyao wakiwa kwenye mtandao mmoja.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-10 max-w-4xl mx-auto px-6 md:px-12 py-10 text-center text-[#86868b] text-xs border-t border-black/[0.05] mt-12 w-full">
+    <p>© 2026 SKYLINK WIFI KITONGA — Mfumo wa Hotspot &amp; Abliner Mobile Money.</p>
+  </footer>
+
+  <script>
+    function revealScript(blockId, btnId) {
+      const block = document.getElementById(blockId);
+      const btn = document.getElementById(btnId);
+      const placeholder = document.getElementById(blockId.replace('-block', '-placeholder'));
+      if (block) block.classList.remove('hidden');
+      if (btn) btn.classList.add('hidden');
+      if (placeholder) placeholder.classList.add('hidden');
+    }
+
+    function generateBridgeScript() {
+      const input = document.getElementById('port-count');
+      const errorEl = document.getElementById('port-error');
+      const total = parseInt(input.value, 10);
+
+      if (!total || total < 2 || total > 24) {
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      errorEl.classList.add('hidden');
+
+      const lanPorts = [];
+      for (let i = 2; i <= total; i++) {
+        lanPorts.push('ether' + i);
+      }
+
+      const bridgePortLines = lanPorts
+        .map(p => `:do { /interface bridge port add bridge="MIKROBILL Main bridge" interface=${p} } on-error={}`)
+        .join('\n');
+
+      const script = `# Create MIKROBILL Bridge
+:do {
+    /interface bridge add name="MIKROBILL Main bridge"
+} on-error={}
+
+# Add ports to MIKROBILL Main bridge (ether2 to ether${total} + wlan1)
+${bridgePortLines}
+:do { /interface bridge port add bridge="MIKROBILL Main bridge" interface=wlan1 } on-error={}
+
+# Verify bridge creation
+:if ([:len [/interface bridge find name="MIKROBILL Main bridge"]] > 0) do={
+    :put "✓ MIKROBILL Main bridge created successfully."
+} else={
+    :put "✗ ERROR: Failed to create MIKROBILL Main bridge."
+}`;
+
+      document.getElementById('script-bridge-code').textContent = script;
+      revealScript('script-bridge-block', null);
+      document.getElementById('script-bridge-placeholder').classList.add('hidden');
+    }
+
+    function copyCode(codeId, labelId) {
+      const codeEl = document.getElementById(codeId);
+      const labelEl = document.getElementById(labelId);
+      const text = codeEl.textContent;
+
+      navigator.clipboard.writeText(text).then(() => {
+        const original = labelEl.textContent;
+        labelEl.textContent = 'Copied!';
+        setTimeout(() => { labelEl.textContent = original; }, 1800);
+      });
+    }
+
+    // Auto-generate bridge script on load for RB951 (5 ports)
+    window.addEventListener('DOMContentLoaded', () => {
+      generateBridgeScript();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+# MikroTik Hotspot error translations for SKYLINK WIFI KITONGA
+internal-error=Hitilafu ya ndani ya mfumo
+config-error=Hitilafu ya mipangilio
+not-logged-in=Hujaunganishwa kwenye mtandao
+user-session-limit=Ukomo wa vifaa kwa akaunti hii umefikiwa
+already-logged-in=Akaunti hii tayari inatumika kwenye kifaa kingine
+ip-assigned=IP hii tayari inatumika
+auth-in-progress=Inathibitisha akaunti, tafadhali subiri...
+radius-timeout=Mawasiliano yamechukua muda mrefu, jaribu tena
+invalid-username=Namba ya simu au jina la akaunti si sahihi
+invalid-password=Nenosiri si sahihi
+uptime-limit=Muda wa kifurushi hiki umemalizika. Tafadhali nunua kifurushi kipya.
+traffic-limit=Kiasi cha data cha kifurushi chako kimemalizika.
