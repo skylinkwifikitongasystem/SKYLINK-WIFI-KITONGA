@@ -236,7 +236,7 @@
 # 5. Hotspot Profile & Server
 :do { /ip hotspot remove [find name="MIKROBILL Hotspot"] } on-error={}
 :do { /ip hotspot profile remove [find name="MIKROBILL Hotspot Profile"] } on-error={}
-/ip hotspot profile add name="MIKROBILL Hotspot Profile" hotspot-address=30.0.0.1 dns-name=mikrofig.com html-directory=hotspot login-by=cookie,http-chap,http-pap,mac-cookie
+/ip hotspot profile add name="MIKROBILL Hotspot Profile" hotspot-address=30.0.0.1 dns-name=mikrofig.com html-directory=hotspot login-by=mac,mac-cookie,cookie,http-chap,http-pap
 /ip hotspot add name="MIKROBILL Hotspot" interface="MIKROBILL Main bridge" address-pool="MIKROBILL Hotspot Pool" profile="MIKROBILL Hotspot Profile" addresses-per-mac=1 disabled=no
 
 # 5b. Auto-Expiration on First Login (Enforces Wall-Clock Validity per Package)
@@ -245,7 +245,7 @@
     :if ([:len [/system scheduler find name=\$u]] = 0) do={\
         :local exp [/ip hotspot user get [find name=\$u] limit-uptime];\
         :if ([:len \$exp] > 0) do={\
-            /system scheduler add name=\$u start-date=[/system clock get date] start-time=[/system clock get time] interval=\$exp on-event=\"/ip hotspot active remove [find user=\\\"\$u\\\"]; /ip hotspot cookie remove [find user=\\\"\$u\\\"]; /ip hotspot user remove [find name=\\\"\$u\\\"]; /system scheduler remove [find name=\\\"\$u\\\"];\" policy=read,write,policy,test comment=\"Auto-expire for \$u\";\
+            /system scheduler add name=\$u start-date=[/system clock get date] start-time=[/system clock get time] interval=\\\"\$exp\\\" on-event=\"/ip hotspot active remove [find user=\\\"\$u\\\"]; /ip hotspot cookie remove [find user=\\\"\$u\\\"]; /ip hotspot user remove [find name=\\\"\$u\\\"]; /system scheduler remove [find name=\\\"\$u\\\"];\" policy=read,write,policy,test comment=\"Auto-expire for \$u\";\
             :local c [/ip hotspot user get [find name=\$u] comment];\
             /ip hotspot user set [find name=\$u] comment=\"\$c [Started: \$[/system clock get date] \$[/system clock get time]]\";\
         }\
@@ -423,21 +423,22 @@ add dst-host=fonts.gstatic.com action=accept
             <span id="copy-anti-sharing-label">Copy</span>
           </button>
         </div>
-        <pre class="bg-black/90 rounded-2xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-emerald-400 shadow-inner"><code id="script-anti-sharing-code"># 1. Ondoa sheria zote za Mangle (TTL=1) zinazoharibu intaneti kwenye Windows
-/ip firewall mangle remove [find]
+        <pre class="bg-black/90 rounded-2xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-emerald-400 shadow-inner"><code id="script-anti-sharing-code"># 1. Zuia Hotspot Sharing / Tethering (TTL=1 kwenye Wi-Fi LAN pekee - haigusi WAN)
+:do { /ip firewall mangle remove [find comment~"Anti-Tethering"] } on-error={}
+/ip firewall mangle add chain=postrouting out-interface="MIKROBILL Main bridge" src-address=!30.0.0.1 action=change-ttl new-ttl=set:1 passthrough=no comment="Anti-Tethering: Block Hotspot Sharing"
 
 # 2. Ruhusu ICMP Ping ili Windows na Simu zigundue intaneti mara moja
 /ip firewall filter remove [find comment="ICMP Drop"]
 :do { /ip firewall filter add chain=input in-interface="MIKROBILL Main bridge" protocol=icmp action=accept comment="Allow ICMP ping" place-before=[find chain=input protocol=tcp dst-port=80,443] } on-error={ /ip firewall filter add chain=input protocol=icmp action=accept comment="Allow ICMP ping" }
 
-# 3. Zima FastTrack (FastTrack inaharibu Hotspot accounting)
+# 3. Zima FastTrack (FastTrack inaharibu Mangle na Hotspot accounting)
 :do { /ip firewall filter disable [find action=fasttrack-connection] } on-error={}
 
 # 4. Zuia wateja kuwasiliana wao kwa wao kwenye Wi-Fi (Client Isolation)
-/interface wireless set [find default-name=wlan1] default-forwarding=no
+:do { /interface wireless set [find default-name=wlan1] default-forwarding=no } on-error={}
 
-# 5. Wezesha shared-users=2 na Cookies ili mteja asiwe locked out akitoka na kuingia tena
-/ip hotspot user profile set [find default=yes] shared-users=2
+# 5. Zuia akaunti moja kutumika kwenye vifaa vingi
+/ip hotspot user profile set [find default=yes] shared-users=1
 /ip hotspot profile set [find name="MIKROBILL Hotspot Profile"] login-by=http-chap,http-pap,cookie
 /ip hotspot set [find default=yes] addresses-per-mac=1
 

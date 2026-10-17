@@ -1829,6 +1829,26 @@
       $(endif)
     </form>
 
+    <!-- Quick Status Bookmark Card -->
+    <div class="mt-4 p-3.5 rounded-2xl bg-blue-50/80 border border-blue-200/60 text-left">
+      <div class="flex items-center gap-2 mb-1">
+        <i class="fa-solid fa-bookmark text-[#0071e3] text-xs"></i>
+        <span class="text-xs font-bold text-[#1d1d1f]">Hifadhi Ukurasa Huu Kwenye Simu</span>
+      </div>
+      <p class="text-[11px] text-[#86868b] leading-relaxed mb-2.5">
+        Ili kuangalia muda wako uliobaki wakati wowote ukiwa umeunganishwa, fungua 
+        <strong class="text-[#0071e3]">30.0.0.1/status</strong> au weka alama (Bookmark).
+      </p>
+      <div class="flex gap-2">
+        <button type="button" onclick="navigator.clipboard && navigator.clipboard.writeText('http://30.0.0.1/status').then(()=>alert('Kiunganishi kimenakiliwa: http://30.0.0.1/status'))" class="flex-1 py-1.5 px-3 rounded-xl bg-white border border-blue-200 text-[#0071e3] text-[11px] font-semibold hover:bg-blue-50 text-center transition">
+          <i class="fa-regular fa-copy"></i> Nakili Kiungo
+        </button>
+        <a href="http://30.0.0.1/status" target="_blank" class="flex-1 py-1.5 px-3 rounded-xl bg-[#0071e3] text-white text-[11px] font-semibold hover:bg-[#0077ed] text-center transition shadow-xs">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Fungua Kivinjari
+        </a>
+      </div>
+    </div>
+
     <!-- Navigation & Shortcuts -->
     <div class="mt-4 pt-3.5 border-t border-black/[0.06] flex items-center justify-between text-xs">
       <a href="menu.html" class="text-[#0071e3] hover:underline font-semibold inline-flex items-center gap-1.5 transition">
@@ -1927,48 +1947,102 @@
       }
     }
 
-    let remainingSeconds = parseDuration(rawLeft);
-    let uptimeSeconds = parseDuration(rawUptime);
+    // Real-Time Atomic Countdown Ticker
+    const clientMac = ("$(mac)" || "").toUpperCase().replace(/[^A-F0-9]/g, "");
+    const currentUser = ("$(username)" || "").trim();
+    const storedPhone = localStorage.getItem('skylink_last_phone') || localStorage.getItem('customer_phone') || "";
+    const relayEndpoint = "https://skylink-pay.skylinkwifisystem.workers.dev";
+    
+    let tickerInterval = null;
 
-    if (remainingSeconds > 0) {
+    function handleExpired() {
+      if (tickerInterval) clearInterval(tickerInterval);
+      updateDisplay(0);
       const titleEl = document.getElementById('ticker-title');
-      if (titleEl) titleEl.innerText = "Muda Uliobaki (Live Time Left)";
-      updateDisplay(remainingSeconds);
-
-      const tickerTimer = setInterval(() => {
-        if (remainingSeconds > 0) {
-          remainingSeconds--;
-          updateDisplay(remainingSeconds);
-        } else {
-          clearInterval(tickerTimer);
-          const stateEl = document.getElementById('ticker-state');
-          if (stateEl) {
-            stateEl.innerText = "Muda Umekwisha!";
-            stateEl.className = "text-rose-600 font-bold text-xs";
-          }
-          setTimeout(() => {
-            window.location.href = "./index.html";
-          }, 2000);
-        }
-      }, 1000);
-    } else if (uptimeSeconds > 0) {
-      const titleEl = document.getElementById('ticker-title');
-      if (titleEl) titleEl.innerText = "Muda Uliotumika (Uptime)";
-      updateDisplay(uptimeSeconds);
-
-      setInterval(() => {
-        uptimeSeconds++;
-        updateDisplay(uptimeSeconds);
-      }, 1000);
-    } else {
-      const titleEl = document.getElementById('ticker-title');
-      if (titleEl) titleEl.innerText = "Muda Uliobaki";
+      if (titleEl) titleEl.innerText = "Muda Umekwisha";
       const stateEl = document.getElementById('ticker-state');
-      if (stateEl) stateEl.innerText = "Mtandao Upo Hewani";
-      document.getElementById('ticker-h').innerText = "--";
-      document.getElementById('ticker-m').innerText = "--";
-      document.getElementById('ticker-s').innerText = "--";
+      if (stateEl) {
+        stateEl.innerText = "Kifurushi Kimekwisha! Inarudi kwenye menyu...";
+        stateEl.className = "text-rose-600 font-bold text-xs";
+      }
+      setTimeout(() => {
+        window.location.href = "./index.html";
+      }, 2500);
     }
+
+    function startLiveCountdown(initialSec, expiresAtMs, pkgName) {
+      if (tickerInterval) clearInterval(tickerInterval);
+      
+      const titleEl = document.getElementById('ticker-title');
+      if (titleEl) titleEl.innerText = pkgName ? `Muda Uliobaki (${pkgName})` : "Muda Uliobaki (Live Countdown)";
+      
+      const stateEl = document.getElementById('ticker-state');
+      if (stateEl) {
+        stateEl.innerText = "Mtandao Unaendelea (Active)";
+        stateEl.className = "text-emerald-600 font-semibold text-xs";
+      }
+
+      function tick() {
+        let sec = 0;
+        if (expiresAtMs) {
+          sec = Math.max(0, Math.floor((expiresAtMs - Date.now()) / 1000));
+        } else {
+          sec = Math.max(0, initialSec--);
+        }
+
+        if (sec <= 0) {
+          handleExpired();
+          return;
+        }
+
+        updateDisplay(sec);
+      }
+
+      tick();
+      tickerInterval = setInterval(tick, 1000);
+    }
+
+    // 1. Instant Start from Cached Expiration (Zero Delay on Page Load)
+    const cacheKey = "skylink_exp_" + (clientMac || currentUser || storedPhone);
+    const cachedExp = parseInt(localStorage.getItem(cacheKey) || "0", 10);
+    if (cachedExp && cachedExp > Date.now()) {
+      const remainingCached = Math.floor((cachedExp - Date.now()) / 1000);
+      startLiveCountdown(remainingCached, cachedExp, "Inahesabu...");
+    }
+
+    // 2. Fetch Live Atomic Status from Cloudflare Worker
+    const qParams = new URLSearchParams();
+    if (clientMac && clientMac.length === 12) qParams.set("mac", clientMac);
+    if (currentUser && !currentUser.includes('$(')) qParams.set("user", currentUser);
+    if (storedPhone) qParams.set("phone", storedPhone);
+
+    fetch(`${relayEndpoint}/user-status?${qParams.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.ok && data.active && data.remaining_seconds > 0) {
+          const expMs = data.expires_at || (Date.now() + data.remaining_seconds * 1000);
+          localStorage.setItem(cacheKey, String(expMs));
+          startLiveCountdown(data.remaining_seconds, expMs, data.duration_name || data.package_name);
+        } else if (data && data.ok && data.expired) {
+          localStorage.removeItem(cacheKey);
+          handleExpired();
+        } else {
+          // Fallback if router template has session-time-left or uptime
+          let remainingSeconds = parseDuration(rawLeft);
+          if (remainingSeconds > 0) {
+            startLiveCountdown(remainingSeconds, Date.now() + remainingSeconds * 1000, "Muda Uliobaki");
+          }
+        }
+      })
+      .catch(() => {
+        // If offline, continue with cached timer or raw template values
+        if (!cachedExp || cachedExp <= Date.now()) {
+          let remainingSeconds = parseDuration(rawLeft);
+          if (remainingSeconds > 0) {
+            startLiveCountdown(remainingSeconds, Date.now() + remainingSeconds * 1000, "Muda Uliobaki");
+          }
+        }
+      });
 
     // Clean unparsed template tags in client preview mode
     function cleanUnparsedTags() {

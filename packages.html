@@ -1940,6 +1940,15 @@
 
   <div class="max-w-7xl mx-auto w-full relative z-10">
 
+    <!-- Top Navigation: Back to Master Menu -->
+    <div class="flex items-center justify-between pt-2 pb-1 px-2">
+      <a href="index.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full apple-glass text-[#0071e3] hover:text-[#0077ed] text-xs font-semibold shadow-xs hover:scale-105 transition-all">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>Menyu Kuu (Master Hub)</span>
+      </a>
+      <span class="text-[11px] text-[#86868b] font-medium hidden sm:inline-block">Kituo cha Wateja</span>
+    </div>
+
     <!-- Top Header -->
     <header class="text-center mb-5 sm:mb-10 pt-1 sm:pt-4">
 
@@ -2051,7 +2060,7 @@
             24 MASAA
           </h3>
           <div class="mt-2 text-[11px] font-semibold sub-pill-blue px-2.5 py-1 rounded-lg w-fit">
-            Movie, YouTube na Uperuzi Siku Nzima
+            Movie, YouTube We peruzi tu Siku Nzima
           </div>
         </div>
 
@@ -2139,7 +2148,7 @@
             SIKU 7
           </h3>
           <div class="mt-2 text-[11px] font-semibold sub-pill-purple px-2.5 py-1 rounded-lg w-fit">
-            Wiki Nzima Kazi &amp; Familia
+            Wiki Nzima Ushindwe Wewe tu
           </div>
         </div>
 
@@ -2228,7 +2237,7 @@
             UNGANISHA
           </h3>
           <div class="mt-2 text-[11px] font-semibold sub-pill-emerald px-2.5 py-1 rounded-lg w-fit">
-            Bofya kurejesha bando lako
+            Bofya kujiunga tena kuendelea na bando lako
           </div>
         </div>
 
@@ -2472,7 +2481,7 @@
       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full apple-glass shadow-xs mb-3 font-medium text-[#1d1d1f] text-xs">
       <span>Imetengenezwa na</span>
       <a href="tel:0707314147" class="font-bold text-[#0071e3] hover:underline" title="Piga simu Catalyst (0707314147)">
-        <span>catalyst</span>
+        <span>Catalyst</span>
       </a>
     </div>
     <p class="text-[11px] sm:text-xs text-[#86868b] font-normal lowercase tracking-normal">
@@ -2490,6 +2499,29 @@
       routerAuth: 'Basic bWlrcm9iaWxsX2JpbGxpbmc6NDI2YWEwMDE4YzM5ZDRkOWM2MDE4NzgwMjYxYmY1ZDU0Yjk5',
       currency: 'TZS'
     };
+
+    // Auto-detect if device already has active package and redirect to status page
+    (function checkActiveDevice() {
+      const clientMac = ("$(mac)" || "").toUpperCase().replace(/[^A-F0-9]/g, "");
+      const cacheKey = "skylink_exp_" + clientMac;
+      const cachedExp = parseInt(localStorage.getItem(cacheKey) || "0", 10);
+      if (cachedExp > Date.now()) {
+        window.location.replace("./status.html");
+        return;
+      }
+      if (clientMac && clientMac.length === 12) {
+        fetch(`${CONFIG.relayUrl}/user-status?mac=${clientMac}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data && data.ok && data.active && data.remaining_seconds > 0) {
+              const expMs = data.expires_at || (Date.now() + data.remaining_seconds * 1000);
+              localStorage.setItem(cacheKey, String(expMs));
+              window.location.replace("./status.html");
+            }
+          })
+          .catch(() => {});
+      }
+    })();
 
     // Orodha ya Vifurushi kwa Shilingi ya Kitanzania (TZS)
     const packages = [
@@ -2606,13 +2638,17 @@
       statusTitle.innerText = "Inatuma Ombi la Malipo...";
       statusText.innerText = "Tafadhali angalia simu yako na uweke PIN ya Mobile Money ili kukamilisha malipo.";
 
+      const clientMac = ("$(mac)" || "").toUpperCase().replace(/[^A-F0-9]/g, "");
+      const formattedMac = (clientMac.length === 12) ? clientMac.match(/.{1,2}/g).join(":") : "";
+
       try {
         const response = await fetch(`${CONFIG.relayUrl}/pay`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             package: pkg.uptimeLimit,
-            phone: normalizedPhone
+            phone: normalizedPhone,
+            mac: formattedMac || clientMac
           })
         });
 
@@ -2630,11 +2666,12 @@
 
         // Start transaction polling
         const ref = data.reference;
+        const authUser = formattedMac || normalizedPhone;
         if (ref) {
-          pollTransaction(ref, normalizedPhone, pkg);
+          pollTransaction(ref, authUser, pkg);
         } else {
           setTimeout(() => {
-            window.location.href = `./access.html?username=${encodeURIComponent(normalizedPhone)}&password=${encodeURIComponent(normalizedPhone)}`;
+            window.location.href = `./access.html?username=${encodeURIComponent(authUser)}&password=${encodeURIComponent(authUser)}`;
           }, 3500);
         }
 
@@ -2648,14 +2685,14 @@
       }
     }
 
-    function pollTransaction(ref, phone, pkg) {
+    function pollTransaction(ref, authUser, pkg) {
       let attempts = 0;
       const maxAttempts = 35;
       const interval = setInterval(async () => {
         attempts++;
         if (attempts > maxAttempts) {
           clearInterval(interval);
-          window.location.href = `./access.html?username=${encodeURIComponent(phone)}&password=${encodeURIComponent(phone)}`;
+          window.location.href = `./access.html?username=${encodeURIComponent(authUser)}&password=${encodeURIComponent(authUser)}`;
           return;
         }
 
@@ -2666,13 +2703,12 @@
             const status = (data.status || '').toLowerCase();
             if (status === 'completed' || status === 'successful' || status === 'success') {
               clearInterval(interval);
-              localStorage.setItem('skylink_last_phone', phone);
               localStorage.setItem('skylink_last_pay_time', String(Date.now()));
               sessionStorage.setItem('skylink_login_retries', '0');
               document.getElementById('loading-status-title').innerText = "Malipo Yamekamilika!";
-              document.getElementById('loading-status-text').innerText = "Akaunti imethibitishwa. Inakuunganisha kwenye mtandao...";
+              document.getElementById('loading-status-text').innerText = "Akaunti ya kifaa hiki imethibitishwa. Inakuunganisha kwenye mtandao...";
               setTimeout(() => {
-                window.location.href = `./access.html?username=${encodeURIComponent(phone)}&password=${encodeURIComponent(phone)}`;
+                window.location.href = `./access.html?username=${encodeURIComponent(authUser)}&password=${encodeURIComponent(authUser)}`;
               }, 2500);
             } else if (status === 'failed' || status === 'cancelled') {
               clearInterval(interval);
@@ -2709,7 +2745,7 @@
       setTimeout(() => backdrop.classList.add('hidden'), 300);
     }
 
-    function handleReconnect() {
+    async function handleReconnect() {
       const input = document.getElementById('reconnect-ref-input');
       const error = document.getElementById('reconnect-error');
       const val = input.value.trim();
@@ -2722,13 +2758,60 @@
       error.classList.add('hidden');
       document.getElementById('reconnect-form-content').classList.add('hidden');
       document.getElementById('reconnect-loading-content').classList.remove('hidden');
-      localStorage.setItem('customer_phone', val);
-      localStorage.setItem('skylink_last_phone', normalized);
-      localStorage.setItem('skylink_last_pay_time', String(Date.now()));
-      sessionStorage.setItem('skylink_login_retries', '0');
-      setTimeout(() => {
-        window.location.href = `./access.html?username=${encodeURIComponent(normalized)}&password=${encodeURIComponent(normalized)}`;
-      }, 1000);
+
+      const titleEl = document.querySelector('#reconnect-loading-content h4');
+      const textEl = document.querySelector('#reconnect-loading-content p');
+      if (titleEl) titleEl.innerText = "Inathibitisha Taarifa...";
+      if (textEl) textEl.innerText = "Tafadhali subiri, tunakagua kifurushi chako...";
+
+      const clientMac = ("$(mac)" || "").toUpperCase().replace(/[^A-F0-9]/g, "");
+      const formattedMac = (clientMac.length === 12) ? clientMac.match(/.{1,2}/g).join(":") : "";
+
+      try {
+        const qParams = new URLSearchParams({ phone: normalized });
+        if (clientMac) qParams.set("mac", clientMac);
+
+        const res = await fetch(`${CONFIG.relayUrl}/user-status?${qParams.toString()}`);
+        const data = await res.json().catch(() => ({}));
+
+        if (data && data.ok && data.active && data.remaining_seconds > 0) {
+          if (titleEl) titleEl.innerText = "Kifurushi Kimethibitishwa!";
+          if (textEl) textEl.innerText = `Kifurushi chako kiko hai (${data.duration_name || data.package_name}). Inakuunganisha sasa...`;
+
+          localStorage.setItem('customer_phone', val);
+          localStorage.setItem('skylink_last_phone', normalized);
+          localStorage.setItem('skylink_last_pay_time', String(Date.now()));
+          localStorage.setItem("skylink_exp_" + clientMac, String(data.expires_at || (Date.now() + data.remaining_seconds * 1000)));
+          sessionStorage.setItem('skylink_login_retries', '0');
+
+          const authUser = formattedMac || data.username || normalized;
+          setTimeout(() => {
+            window.location.href = `./access.html?username=${encodeURIComponent(authUser)}&password=${encodeURIComponent(authUser)}`;
+          }, 1500);
+          return;
+        }
+
+        // Failure / Mismatch: Return to form with exact user-friendly message
+        document.getElementById('reconnect-loading-content').classList.add('hidden');
+        document.getElementById('reconnect-form-content').classList.remove('hidden');
+
+        if (data && data.device_mismatch) {
+          error.innerText = "Tafadhali nunua kifurushi kwa ajili ya kifaa hiki.";
+        } else if (data && data.expired) {
+          error.innerText = data.message || "Kifurushi chako kimemalizika muda wake. Tafadhali nunua kifurushi kipya.";
+        } else if (data && data.not_found) {
+          error.innerText = data.message || "Hakuna taarifa za malipo kwa namba hii. Tafadhali chagua kifurushi hapa chini.";
+        } else {
+          error.innerText = (data && data.message) ? data.message : "Tafadhali nunua kifurushi kwa ajili ya kifaa hiki.";
+        }
+        error.classList.remove('hidden');
+
+      } catch (err) {
+        document.getElementById('reconnect-loading-content').classList.add('hidden');
+        document.getElementById('reconnect-form-content').classList.remove('hidden');
+        error.innerText = "Haikuweza kuthibitisha na seva kwa sasa. Tafadhali jaribu tena.";
+        error.classList.remove('hidden');
+      }
     }
   </script>
 </body>

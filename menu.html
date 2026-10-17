@@ -1,247 +1,260 @@
 <!DOCTYPE html>
 <html lang="sw" class="light">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SKYLINK WIFI KITONGA — Kituo Kikuu cha Usimamizi</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SKYLINK WIFI KITONGA — Kituo Kikuu cha Usimamizi</title>
 
-<!-- Favicon Assets -->
-<link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <!-- Favicon Assets -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
-<!-- Local CSS & Tailwind CDN -->
-<link rel="stylesheet" href="assets/style.css" />
-<script src="https://cdn.tailwindcss.com"></script>
+  <!-- Local CSS & Tailwind CDN -->
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-  :root {
-    --apple-bg: #f5f5f7;
-    --apple-text: #1d1d1f;
-    --apple-subtext: #86868b;
-    --apple-blue: #0071e3;
-    --apple-blue-hover: #0077ed;
-    --apple-blue-glow: rgba(0, 113, 227, 0.35);
-  }
+    :root {
+      --apple-bg: #f5f5f7;
+      --apple-text: #1d1d1f;
+      --apple-subtext: #86868b;
+      --apple-blue: #0071e3;
+      --apple-blue-hover: #0077ed;
+      --apple-blue-glow: rgba(0, 113, 227, 0.35);
+    }
 
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", "Helvetica Neue", sans-serif !important;
-    background-color: #f5f5f7 !important;
-    color: #1d1d1f !important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 1.25rem 1rem;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  @media (min-width: 640px) {
     body {
-      padding: 2rem 1.5rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", "Helvetica Neue", sans-serif !important;
+      background-color: #f5f5f7 !important;
+      color: #1d1d1f !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.25rem 1rem;
+      position: relative;
+      overflow-x: hidden;
     }
-  }
 
-  /* Apple Frosted Glass Utilities */
-  .apple-glass {
-    background: rgba(255, 255, 255, 0.78) !important;
-    backdrop-filter: blur(28px) saturate(180%);
-    -webkit-backdrop-filter: blur(28px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.9) !important;
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.95) !important;
-  }
+    @media (min-width: 640px) {
+      body {
+        padding: 2rem 1.5rem;
+      }
+    }
 
-  .apple-glass-card {
-    background: rgba(255, 255, 255, 0.76) !important;
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.85) !important;
-    box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.95) !important;
-    border-radius: 28px !important;
-    padding: 1.35rem 1.25rem !important;
-    display: flex !important;
-    align-items: flex-start !important;
-    gap: 1.15rem !important;
-    text-decoration: none !important;
-    color: inherit !important;
-    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    position: relative;
-  }
+    /* Apple Frosted Glass Utilities */
+    .apple-glass {
+      background: rgba(255, 255, 255, 0.78) !important;
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.9) !important;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.95) !important;
+    }
 
-  @media (min-width: 640px) {
     .apple-glass-card {
-      padding: 1.5rem !important;
+      background: rgba(255, 255, 255, 0.76) !important;
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+      box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.95) !important;
+      border-radius: 28px !important;
+      padding: 1.35rem 1.25rem !important;
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 1.15rem !important;
+      text-decoration: none !important;
+      color: inherit !important;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      position: relative;
     }
-  }
 
-  .apple-glass-card:hover {
-    background: rgba(255, 255, 255, 0.95) !important;
-    border-color: rgba(255, 255, 255, 1) !important;
-    box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.09), inset 0 1px 0 0 rgba(255, 255, 255, 1) !important;
-    transform: translateY(-4px) scale(1.008) !important;
-  }
+    @media (min-width: 640px) {
+      .apple-glass-card {
+        padding: 1.5rem !important;
+      }
+    }
 
-  .apple-glass-card:hover .arrow-icon {
-    transform: translateX(4px);
-    color: #0071e3 !important;
-  }
+    .apple-glass-card:hover {
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-color: rgba(255, 255, 255, 1) !important;
+      box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.09), inset 0 1px 0 0 rgba(255, 255, 255, 1) !important;
+      transform: translateY(-4px) scale(1.008) !important;
+    }
 
-  .apple-glass-hero {
-    background: linear-gradient(135deg, rgba(0, 113, 227, 0.06), rgba(255, 255, 255, 0.85)) !important;
-    border: 1.5px solid rgba(0, 113, 227, 0.35) !important;
-    box-shadow: 0 20px 45px -12px rgba(0, 113, 227, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 1) !important;
-  }
+    .apple-glass-card:hover .arrow-icon {
+      transform: translateX(4px);
+      color: #0071e3 !important;
+    }
 
-  .apple-glass-hero:hover {
-    border-color: rgba(0, 113, 227, 0.6) !important;
-    box-shadow: 0 28px 60px -12px rgba(0, 113, 227, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 1) !important;
-  }
+    .apple-glass-hero {
+      background: linear-gradient(135deg, rgba(0, 113, 227, 0.06), rgba(255, 255, 255, 0.85)) !important;
+      border: 1.5px solid rgba(0, 113, 227, 0.35) !important;
+      box-shadow: 0 20px 45px -12px rgba(0, 113, 227, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 1) !important;
+    }
 
-  /* Responsive Cards Grid */
-  .menu-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 1rem !important;
-  }
+    .apple-glass-hero:hover {
+      border-color: rgba(0, 113, 227, 0.6) !important;
+      box-shadow: 0 28px 60px -12px rgba(0, 113, 227, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 1) !important;
+    }
 
-  @media (min-width: 768px) {
+    /* Responsive Cards Grid */
     .menu-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-      gap: 1.25rem !important;
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 1rem !important;
     }
-    .col-span-full {
-      grid-column: 1 / -1 !important;
+
+    @media (min-width: 768px) {
+      .menu-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 1.25rem !important;
+      }
+
+      .col-span-full {
+        grid-column: 1 / -1 !important;
+      }
     }
-  }
 
-  /* Icon Containers */
-  .icon-box {
-    width: 3.25rem;
-    height: 3.25rem;
-    flex-shrink: 0;
-    border-radius: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.35rem;
-    transition: transform 0.25s ease;
-  }
+    /* Icon Containers */
+    .icon-box {
+      width: 3.25rem;
+      height: 3.25rem;
+      flex-shrink: 0;
+      border-radius: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      transition: transform 0.25s ease;
+    }
 
-  .apple-glass-card:hover .icon-box {
-    transform: scale(1.08);
-  }
+    .apple-glass-card:hover .icon-box {
+      transform: scale(1.08);
+    }
 
-  .icon-blue {
-    background: #0071e3;
-    color: #ffffff;
-    box-shadow: 0 8px 20px -4px rgba(0, 113, 227, 0.4);
-  }
+    .icon-blue {
+      background: #0071e3;
+      color: #ffffff;
+      box-shadow: 0 8px 20px -4px rgba(0, 113, 227, 0.4);
+    }
 
-  .icon-teal {
-    background: rgba(20, 184, 166, 0.12);
-    border: 1px solid rgba(20, 184, 166, 0.25);
-    color: #0d9488;
-  }
+    .icon-teal {
+      background: rgba(20, 184, 166, 0.12);
+      border: 1px solid rgba(20, 184, 166, 0.25);
+      color: #0d9488;
+    }
 
-  .icon-purple {
-    background: rgba(168, 85, 247, 0.12);
-    border: 1px solid rgba(168, 85, 247, 0.25);
-    color: #9333ea;
-  }
+    .icon-purple {
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      color: #9333ea;
+    }
 
-  .icon-sky {
-    background: rgba(14, 165, 233, 0.12);
-    border: 1px solid rgba(14, 165, 233, 0.25);
-    color: #0284c7;
-  }
+    .icon-sky {
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(14, 165, 233, 0.25);
+      color: #0284c7;
+    }
 
-  .icon-indigo {
-    background: rgba(99, 102, 241, 0.12);
-    border: 1px solid rgba(99, 102, 241, 0.25);
-    color: #4f46e5;
-  }
+    .icon-indigo {
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #4f46e5;
+    }
 
-  .icon-emerald {
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.25);
-    color: #059669;
-  }
+    .icon-emerald {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #059669;
+    }
 
-  .icon-amber {
-    background: rgba(245, 158, 11, 0.12);
-    border: 1px solid rgba(245, 158, 11, 0.25);
-    color: #d97706;
-  }
+    .icon-amber {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #d97706;
+    }
 
-  /* Tag Badges */
-  .tag-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 0.18rem 0.65rem;
-    border-radius: 9999px;
-    letter-spacing: 0.02em;
-  }
+    /* Tag Badges */
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 0.18rem 0.65rem;
+      border-radius: 9999px;
+      letter-spacing: 0.02em;
+    }
 
-  /* Ambient Blobs */
-  .ambient-blob {
-    position: fixed;
-    border-radius: 9999px;
-    pointer-events: none;
-    z-index: -10;
-  }
-</style>
+    /* Ambient Blobs */
+    .ambient-blob {
+      position: fixed;
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: -10;
+    }
+  </style>
 </head>
 
 <body class="antialiased">
 
   <!-- Apple Iridescent Ambient Mesh Blobs -->
-  <div class="ambient-blob top-[-15%] left-[-10%] w-[580px] h-[580px] bg-gradient-to-br from-blue-300/35 via-indigo-200/25 to-sky-200/30 blur-[130px]"></div>
-  <div class="ambient-blob top-[35%] right-[-15%] w-[620px] h-[620px] bg-gradient-to-br from-teal-200/30 via-emerald-100/25 to-sky-300/30 blur-[140px]"></div>
-  <div class="ambient-blob bottom-[-15%] left-[25%] w-[520px] h-[520px] bg-gradient-to-tr from-purple-200/25 via-pink-100/20 to-blue-200/25 blur-[130px]"></div>
+  <div
+    class="ambient-blob top-[-15%] left-[-10%] w-[580px] h-[580px] bg-gradient-to-br from-blue-300/35 via-indigo-200/25 to-sky-200/30 blur-[130px]">
+  </div>
+  <div
+    class="ambient-blob top-[35%] right-[-15%] w-[620px] h-[620px] bg-gradient-to-br from-teal-200/30 via-emerald-100/25 to-sky-300/30 blur-[140px]">
+  </div>
+  <div
+    class="ambient-blob bottom-[-15%] left-[25%] w-[520px] h-[520px] bg-gradient-to-tr from-purple-200/25 via-pink-100/20 to-blue-200/25 blur-[130px]">
+  </div>
 
   <div class="relative z-10 max-w-4xl mx-auto w-full py-2 sm:py-6">
 
     <!-- Header -->
     <header class="text-center mb-7 sm:mb-9">
-      <div class="inline-flex items-center justify-center p-3 rounded-[26px] apple-glass mb-3 hover:scale-105 transition-transform duration-300 shadow-sm">
+      <div
+        class="inline-flex items-center justify-center p-3 rounded-[26px] apple-glass mb-3 hover:scale-105 transition-transform duration-300 shadow-sm">
         <img src="assets/logo.png" alt="SKYLINK WIFI KITONGA" class="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
       </div>
       <h1 class="text-2xl sm:text-4xl font-extrabold text-[#1d1d1f] tracking-tight">SKYLINK WIFI KITONGA</h1>
-      <p class="text-[#86868b] text-xs sm:text-sm mt-1.5 font-medium tracking-tight">Kituo Kikuu cha Usimamizi na Tovuti ya Mtandao</p>
+      <p class="text-[#86868b] text-xs sm:text-sm mt-1.5 font-medium tracking-tight">Kituo Kikuu cha Usimamizi na Tovuti
+        ya Mtandao</p>
     </header>
 
     <!-- Apple Glassy Menu Cards Grid -->
     <div class="menu-grid">
 
       <!-- 1. Customer Hotspot Portal (Hero Card - Full Width) -->
-      <a class="apple-glass-card apple-glass-hero col-span-full group" href="index.html">
+      <a class="apple-glass-card apple-glass-hero col-span-full group" href="packages.html">
         <div class="icon-box icon-blue">
           <i class="fa-solid fa-wifi"></i>
         </div>
         <div class="flex-1">
           <div class="flex items-center gap-2 flex-wrap">
-            <h3 class="font-bold text-[#1d1d1f] text-base sm:text-lg group-hover:text-[#0071e3] transition tracking-tight">Tovuti ya Wateja (Live Hotspot Portal)</h3>
+            <h3
+              class="font-bold text-[#1d1d1f] text-base sm:text-lg group-hover:text-[#0071e3] transition tracking-tight">
+              Tovuti ya Wateja (Live Hotspot Portal)</h3>
             <span class="tag-badge bg-[#0071e3] text-white">Kuu / Live Wateja</span>
           </div>
           <p class="text-[#86868b] text-xs mt-1 leading-relaxed">
-            Huu ndio ukurasa ambao mteja anauona akijiunga kwenye Wi-Fi ya <strong>SKYLINK WIFI KITONGA</strong> ili kuchagua kifurushi na kulipa moja kwa moja kwa M-Pesa, Tigo Pesa, Airtel au HaloPesa.
+            Huu ndio ukurasa ambao mteja anauona akijiunga kwenye Wi-Fi ya <strong>SKYLINK WIFI KITONGA</strong> ili
+            kuchagua kifurushi na kulipa moja kwa moja kwa M-Pesa, Tigo Pesa, Airtel au HaloPesa.
           </p>
         </div>
         <i class="fa-solid fa-arrow-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-2 text-sm"></i>
@@ -254,12 +267,15 @@
         </div>
         <div class="flex-1">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-teal-600 transition tracking-tight">Takwimu &amp; Mauzo</h3>
+            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-teal-600 transition tracking-tight">Takwimu
+              &amp; Mauzo</h3>
             <span class="tag-badge bg-teal-500/15 text-teal-700 border border-teal-500/20">Admin</span>
           </div>
-          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Angalia mauzo ya siku (TZS), salio la mfumo, kutoa pesa kwenye simu (Withdraw), na afya ya router.</p>
+          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Angalia mauzo ya siku (TZS), salio la mfumo, kutoa pesa
+            kwenye simu (Withdraw), na afya ya router.</p>
         </div>
-        <i class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
+        <i
+          class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
       </a>
 
       <!-- 3. Captive Portal Setup (Packages & Pricing) -->
@@ -269,12 +285,15 @@
         </div>
         <div class="flex-1">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-purple-600 transition tracking-tight">Vifurushi &amp; Bei</h3>
+            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-purple-600 transition tracking-tight">
+              Vifurushi &amp; Bei</h3>
             <span class="tag-badge bg-purple-500/15 text-purple-700 border border-purple-500/20">Pricing</span>
           </div>
-          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Badilisha bei, majina ya vifurushi, au muda wa intaneti na upakue packages.html mpya moja kwa moja.</p>
+          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Badilisha bei, majina ya vifurushi, au muda wa intaneti
+            na upakue packages.html mpya moja kwa moja.</p>
         </div>
-        <i class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
+        <i
+          class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
       </a>
 
       <!-- 4. Customer Session Status Page -->
@@ -284,12 +303,15 @@
         </div>
         <div class="flex-1">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-amber-600 transition tracking-tight">Hali ya Mteja (Status)</h3>
+            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-amber-600 transition tracking-tight">Hali ya
+              Mteja (Status)</h3>
             <span class="tag-badge bg-amber-500/15 text-amber-700 border border-amber-500/20">Live Session</span>
           </div>
-          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Ukurasa ambao mteja anaona muda wake uliobaki (Live Countdown), anwani ya IP, na kitufe cha Logout.</p>
+          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Ukurasa ambao mteja anaona muda wake uliobaki (Live
+            Countdown), anwani ya IP, na kitufe cha Logout.</p>
         </div>
-        <i class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
+        <i
+          class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
       </a>
 
       <!-- 5. MikroTik WebFig (Admin Direct) -->
@@ -299,12 +321,15 @@
         </div>
         <div class="flex-1">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-emerald-600 transition tracking-tight">MikroTik WebFig</h3>
+            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-emerald-600 transition tracking-tight">
+              MikroTik WebFig</h3>
             <span class="tag-badge bg-emerald-500/15 text-emerald-700 border border-emerald-500/20">30.0.0.2</span>
           </div>
-          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Fungua kiolesura cha wavuti cha MikroTik RouterOS v7 kusimamia bandari, watumiaji, na miundo ya router.</p>
+          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Fungua kiolesura cha wavuti cha MikroTik RouterOS v7
+            kusimamia bandari, watumiaji, na miundo ya router.</p>
         </div>
-        <i class="fa-solid fa-arrow-up-right-from-square text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
+        <i
+          class="fa-solid fa-arrow-up-right-from-square text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
       </a>
 
       <!-- 6. Onboarding & Router Provisioning -->
@@ -314,12 +339,15 @@
         </div>
         <div class="flex-1">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-sky-600 transition tracking-tight">Kusanidi Router</h3>
+            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-sky-600 transition tracking-tight">Kusanidi
+              Router</h3>
             <span class="tag-badge bg-sky-500/15 text-sky-700 border border-sky-500/20">Winbox</span>
           </div>
-          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Pata script kamili ya kuweka kwenye Terminal ya Winbox ili kusanidi MikroTik RB951 kwa dakika 2 tu.</p>
+          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Pata script kamili ya kuweka kwenye Terminal ya Winbox
+            ili kusanidi MikroTik RB951 kwa dakika 2 tu.</p>
         </div>
-        <i class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
+        <i
+          class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
       </a>
 
       <!-- 7. Setup Flowchart & Wizard -->
@@ -329,33 +357,43 @@
         </div>
         <div class="flex-1">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-indigo-600 transition tracking-tight">Mwongozo wa Hatua</h3>
+            <h3 class="font-bold text-[#1d1d1f] text-base group-hover:text-indigo-600 transition tracking-tight">
+              Mwongozo wa Hatua</h3>
             <span class="tag-badge bg-indigo-500/15 text-indigo-700 border border-indigo-500/20">Guide</span>
           </div>
-          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Muhtasari wa hatua zote 4 za kuanzisha hotspot yako kuanzia mwanzo hadi kukamilika.</p>
+          <p class="text-[#86868b] text-xs mt-1 leading-relaxed">Muhtasari wa hatua zote 4 za kuanzisha hotspot yako
+            kuanzia mwanzo hadi kukamilika.</p>
         </div>
-        <i class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
+        <i
+          class="fa-solid fa-chevron-right text-[#86868b] arrow-icon transition duration-200 shrink-0 mt-1 text-xs"></i>
       </a>
 
     </div>
 
     <!-- Supported Telcos Banner -->
     <div class="mt-8 sm:mt-10 text-center">
-      <div class="inline-flex items-center gap-3 rounded-full apple-glass px-5 py-2.5 shadow-xs flex-wrap justify-center">
+      <div
+        class="inline-flex items-center gap-3 rounded-full apple-glass px-5 py-2.5 shadow-xs flex-wrap justify-center">
         <span class="text-xs font-semibold text-[#86868b]">Malipo ya Papo Hapo:</span>
-        <img src="assets/voda.jpg" alt="M-Pesa" style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
-        <img src="assets/mixx.png" alt="Tigo Pesa" style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
-        <img src="assets/airtel.webp" alt="Airtel" style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
-        <img src="assets/halopesa.png" alt="HaloPesa" style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
+        <img src="assets/voda.jpg" alt="M-Pesa"
+          style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
+        <img src="assets/mixx.png" alt="Tigo Pesa"
+          style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
+        <img src="assets/airtel.webp" alt="Airtel"
+          style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
+        <img src="assets/halopesa.png" alt="HaloPesa"
+          style="height: 20px; max-height: 20px; width: auto; object-fit: contain;" class="rounded-md shadow-xs" />
       </div>
     </div>
 
     <!-- Footer -->
     <footer class="text-center text-[#86868b] text-xs mt-8 pt-4">
-      <p>© 2026 SKYLINK WIFI KITONGA. Imetengenezwa na <a href="tel:0707314147" class="font-bold text-[#0071e3] hover:underline">catalyst</a>.</p>
+      <p>© 2026 Skylink Wifi Kitonga. Imetengenezwa na <a href="tel:0707314147"
+          class="font-bold text-[#0071e3] hover:underline">Catalyst</a>.</p>
     </footer>
 
   </div>
 
 </body>
+
 </html>
